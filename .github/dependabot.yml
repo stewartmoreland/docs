@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "monthly"
+    day: "monday"
+    time: "16:00"
+    timezone: "UTC"
+- package-ecosystem: "pip"
+  directory: "/"
+  schedule:
+    interval: "monthly"
+    day: "monday"
+    time: "16:00"
+    timezone: "UTC"
