@@ -1,5 +1,9 @@
 # KEDA (Kubernetes Event Driven Autoscaling)
 
+<p align="center">
+  <img src="https://github.com/kedacore/keda/blob/main/images/logos/keda-word-colour.png?raw=true" />
+</p>
+
 KEDA (Kubernetes-based Event Driven Autoscaler) extends HPA features to enable resource scaling based on events both within and external to the cluster.
 
 ## ScaledObjects
