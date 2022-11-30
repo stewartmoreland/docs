@@ -460,7 +460,7 @@ DEBUG root postgres
 
 Now edit the `env.json` to reflect `localhost` and `localuser` for the respective values and restart the local API. Notice the difference in the logs?
 
-### Deploy to Stage
+### :rocket: Deploy the Function
 
 Finally, lets deploy the app and see how it differs when pulling our config secrets from Secrets Manager. For the demo, we'll deploy the app from command line.
 
@@ -470,12 +470,22 @@ Finally, lets deploy the app and see how it differs when pulling our config secr
 sam deploy --stack-name sam-app-demo --resolve-s3 --capabilities CAPABILITY_IAM --parameter-overrides SecretName=hello-world/stage Environment=stage
 ```
 
-Look in the outputs from the deployment command for the value of `HelloWorldApi` and open the link in your browser. It should return with the `{"message": "hello world"}` response as configured in the function return statement. Now open CloudWatch Logs from the AWS Console and find the latest log event for our Lambda function. You should notice in the logs that the debug statement is missing since we didn't overwrite the `LOG_LEVEL` from our base configuration class. The info log returned, however, reflects the value we placed in our secret as follows.
+Look in the outputs from the deployment command for the value of `HelloWorldApi` and open the link in your browser. It should return with the `{"message": "hello world"}` response as configured in the function return statement.
+
+Now open CloudWatch Logs from the AWS Console and find the latest log event for our Lambda function. You should notice in the logs that the debug statement is missing since we didn't overwrite the `LOG_LEVEL` from our base configuration class. The info log returned, however, reflects the value we placed in our secret as follows.
 
 ```txt
 INFO root mydb.example.com
 ```
 
+Want to see debug logs? Those can be set in one of two places. Either in the secret itself or in an environment variable on the Lambda function. Why? Because we configured our base `Config` class to get the proper logging attribute from the `LOG_LEVEL` environment variable.
+
+```python
+self.LOG_LEVEL = getattr(logging, os.environ.get('LOG_LEVEL', 'INFO'), logging.INFO)
+```
+
+That said leads to the following conclusion. You can define any configuration property and key you want in a Secrets Manager secret. Anything you want defined in an environment variable should be declared in the base `Config` class.
+
 ## Conclusion
 
-AWS Secrets Manager, when used with Python class object inheritance, can be a secure and easy method of managing your environment configs. It's a key component to maintaining secure environments across both local development and live environments.
+AWS Secrets Manager, when used with Python class object inheritance, can be a secure and easy method of managing your environment configs. It's a key component to maintaining secure coding practices across local development and live environments.
