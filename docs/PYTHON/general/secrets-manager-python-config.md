@@ -13,6 +13,12 @@ In this guide, we’ll walk through how to create a Python configuration class u
 - [AWS Python SDK (Boto3)](https://aws.amazon.com/sdk-for-python/)
 - Some experience with Python Development
 
+## Architecture
+
+<p align='center'>
+  <img src='/assets/secrets-manager-python-config.png'>
+</p>
+
 ## Guide
 
 ### Create a Secret
@@ -372,11 +378,18 @@ Let's now add a log statement of the Lambda handler to demonstrate our configs.
 
 !!!warning "Please do not log or return any secret values in a deployed application. This is only for demonstration purposes."
 
-Add a `logging` import at the top of `app.py` and create an info log and a debug log statement inside the `lambda_handler` function. You may also want to set the root logger for your application to use the `config.LOG_LEVEL` and `config.LOG_FORMAT` attributes we configured earlier.
+Add a `logging` import at the top of `app.py` and create an info log and a debug log statement inside the `lambda_handler` function. You will also want to set the root logger for your application to use the `config.LOG_LEVEL` and `config.LOG_FORMAT` attributes we configured earlier.
 
 ```python
 logging.root.handlers = []
 logging.basicConfig(level=config.LOG_LEVEL, format=config.LOG_FORMAT)
+```
+
+Let's also add some logging statements to reflect the config differences between environments. Within the lambda handler, between the `logging.basicConfig` and the `return` statement, add the following lines.
+
+```python
+logging.info(config.DB_ENDPOINT)
+logging.debug(config.DB_USERNAME)
 ```
 
 By now, your `app.py` should look something like this.
@@ -397,8 +410,8 @@ By now, your `app.py` should look something like this.
         logging.root.handlers = []
         logging.basicConfig(level=config.LOG_LEVEL, format=config.LOG_FORMAT)
 
-        logging.info(config.DB_USERNAME)
-        logging.debug(config.DB_PASSWORD)
+        logging.info(config.DB_ENDPOINT)
+        logging.debug(config.DB_USERNAME)
 
         return {
             "statusCode": 200,
@@ -438,20 +451,20 @@ The command would now be as follows
 sam local start-api --env-vars env.json
 ```
 
-Once the application starts, open a browser to `http://127.0.0.1:3000/hello` and look through the logs in the terminal you started the API. You should see two statements, both returning the default values we set in the base Config class. 
+Once the application starts, open a browser to `http://127.0.0.1:3000/hello` and look through the logs in the terminal where you started the API. You should see two statements, both returning the default values we set in the base Config class.
 
 ```txt
-INFO root postgres
+INFO root host.docker.internal
 DEBUG root postgres
 ```
 
-Now edit the `env.json` to reflect `local-user` and `local-pass` for the respective values and restart the local API. Notice the difference in the logs?
+Now edit the `env.json` to reflect `localhost` and `localuser` for the respective values and restart the local API. Notice the difference in the logs?
 
 ### Deploy to Stage
 
 Finally, lets deploy the app and see how it differs when pulling our config secrets from Secrets Manager. For the demo, we'll deploy the app from command line.
 
-!!!note "If you're deploying a full SAM application, it's recommended to set up a SAM deployment pipeline using your preferred CI/CD platform."
+!!!note "If you're deploying a production SAM application, it's recommended to set up a SAM deployment pipeline using your preferred CI/CD platform."
 
 ```shell
 sam deploy --stack-name sam-app-demo --resolve-s3 --capabilities CAPABILITY_IAM --parameter-overrides SecretName=hello-world/stage Environment=stage
@@ -460,7 +473,7 @@ sam deploy --stack-name sam-app-demo --resolve-s3 --capabilities CAPABILITY_IAM 
 Look in the outputs from the deployment command for the value of `HelloWorldApi` and open the link in your browser. It should return with the `{"message": "hello world"}` response as configured in the function return statement. Now open CloudWatch Logs from the AWS Console and find the latest log event for our Lambda function. You should notice in the logs that the debug statement is missing since we didn't overwrite the `LOG_LEVEL` from our base configuration class. The info log returned, however, reflects the value we placed in our secret as follows.
 
 ```txt
-INFO root mydbuser
+INFO root mydb.example.com
 ```
 
 ## Conclusion
