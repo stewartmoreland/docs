@@ -1,4 +1,5 @@
 site_name: DevOops Documentation
+site_url: https://stewartmoreland.github.io/docs/
 theme:
   name: material
   # logo: assets/logo-white.png
@@ -24,6 +25,10 @@ theme:
     code: Roboto Mono
 repo_name: stewartmoreland/docs
 repo_url: https://github.com/stewartmoreland/docs
+
+plugins:
+  - social:
+      cards: !ENV [CARDS, false]
 
 # Extensions
 markdown_extensions:

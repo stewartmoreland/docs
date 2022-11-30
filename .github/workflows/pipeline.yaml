@@ -13,12 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-      - name: Install dependencies
+      - name: Install OS dependencies
+        run: apt-get install libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
       - name: MkDocs Build
         run: mkdocs build
         env:
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
+          CARDS: true
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload GitHub Pages artifact

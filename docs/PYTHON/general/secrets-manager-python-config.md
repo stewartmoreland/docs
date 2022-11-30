@@ -16,7 +16,7 @@ In this guide, we’ll walk through how to create a Python configuration class u
 ## Architecture
 
 <p align='center'>
-  <img src='/docs/assets/secrets-manager-python-config.png'>
+  <img src='/docs/assets/images/python/secrets-manager-python-config.png'>
 </p>
 
 ## Guide
