@@ -16,7 +16,7 @@ In this guide, we’ll walk through how to create a Python configuration class u
 ## Architecture
 
 <p align='center'>
-  <img src='/assets/secrets-manager-python-config.png'>
+  <img src='/docs/assets/secrets-manager-python-config.png'>
 </p>
 
 ## Guide
@@ -130,13 +130,13 @@ Outputs:
 
 While in the `template.yaml` file, look under the `Resources` block, in the `HelloWorldFunction`, we'll add an environment config using the two `Environment` & `SecretName` parameters we defined above. Place the following block somewhere within the `Resources.HelloWorldFunction.Properties` map.
 
-!!!example
-    ```yaml
-    Environment:
-      Variables:
-        ENVIRONMENT: !Ref Environment
-        SECRET_NAME: !Ref SecretName
-    ```
+
+```yaml
+Environment:
+  Variables:
+    ENVIRONMENT: !Ref Environment
+    SECRET_NAME: !Ref SecretName
+```
 
 Your `template.yaml` file should now look something like this.
 

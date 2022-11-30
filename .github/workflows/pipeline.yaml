@@ -17,6 +17,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: MkDocs Build
         run: mkdocs build
+        env:
+          GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload GitHub Pages artifact
