@@ -1,11 +1,9 @@
-# Production Ready Spring Boot in Kubernetes: Part 3
+# Part 3: Configuration Management
 
 :construction: work in progress :construction:
 
-## Configuration Management
+## Local Development vs Live Environment
 
-### Local Development vs Live Environment
+## Application Properties
 
-### Application Properties
-
-### Secrets
+## Secrets

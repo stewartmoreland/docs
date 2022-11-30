@@ -1,19 +1,17 @@
-# Production Ready Spring Boot in Kubernetes: Part 2
+# Part 2: Kubernetes Manifests
 
 :construction: work in progress :construction:
 
-## Kubernetes Manifests
+## Templating
 
-### Templating
+### Helm (we :mustache: you a question)
 
-#### Helm (we :mustache: you a question)
+### Kustomize (:overlay:)
 
-#### Kustomize (:overlay:)
+## Requests & Limits
 
-### Requests & Limits
+## Service Accounts
 
-### Service Accounts
+## Security Contexts
 
-### Security Contexts
-
-### Readiness & Liveness Checks
+## Readiness & Liveness Checks

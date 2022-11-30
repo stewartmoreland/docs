@@ -1,9 +1,7 @@
-# Production Ready Spring Boot in Kubernetes: Part 5
+# Part 5: Scaling &uarr;UP Spring Boot Applications
 
 :construction: work in progress :construction:
 
-## Scaling &uarr;UP Spring Boot Applications
+## HPA (Native)
 
-### HPA (Native)
-
-### KEDA (Kubernetes Event Driven Autoscaler)
+## KEDA (Kubernetes Event Driven Autoscaler)
