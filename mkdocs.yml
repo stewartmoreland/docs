@@ -28,6 +28,8 @@ repo_name: stewartmoreland/docs
 repo_url: https://github.com/stewartmoreland/docs
 
 plugins:
+  - search:
+      lang: en
   - social:
       cards: !ENV [CARDS, false]
 
