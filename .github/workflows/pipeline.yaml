@@ -9,38 +9,26 @@ on:
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-
-      - name: Install OS dependencies
-        run: |
-          sudo apt-get install -y \
-                        libcairo2-dev \
-                        libfreetype6-dev \
-                        libffi-dev \
-                        libjpeg-dev \
-                        libpng-dev \
-                        libz-dev
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-      - uses: actions/cache@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          key: ${{ github.ref }}
-          path: .cache
-      - name: MkDocs Build
-        run: mkdocs build
-        env:
-          GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
-          CARDS: true
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site/
+          path: ./build
 
   deploy:
     needs: build
@@ -54,4 +42,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
